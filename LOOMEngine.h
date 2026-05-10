@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "BoxCollider.h"
 #include "PhysicsBody.h"
+#include "CollisionEvent.h"
 #include "Pattern.h"
 
 #include "ShuttleShed.h"
