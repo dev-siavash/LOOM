@@ -14,6 +14,11 @@
 
 namespace LOOM
 {
+    struct LoomSettings
+    {
+        Math::Vector globalGravityScale = Math::Vector(0.0f, -9.8f);
+    };
+
     class Loom
     {
     public:
@@ -33,6 +38,7 @@ namespace LOOM
         }
 
         Fabric& GetFabric() { return fabric; }
+        LoomSettings& Settings() { return settings; }
 
         bool IsRunning() const { return isRunning; }
     private:
@@ -49,6 +55,8 @@ namespace LOOM
         InternalUtilities::AudioCache audioCache;
 
         std::vector<ShuttlePass> shuttlePasses;
+
+        LoomSettings settings;
 
         bool isRunning = false;
         bool delayedTermination = false;
