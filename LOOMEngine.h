@@ -7,6 +7,8 @@
 #include "InputState.h"
 #include "AudioClip.h"
 #include "Transform.h"
+#include "BoxCollider.h"
+#include "PhysicsBody.h"
 #include "Pattern.h"
 
 #include "ShuttleShed.h"

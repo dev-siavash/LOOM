@@ -3,13 +3,14 @@
 
 #include "Transform.h"
 #include "Pattern.h"
+#include "BoxCollider.h"
 #include "InternalShuttles.h"
 
 using namespace LOOM::InternalUtilities;
 
 namespace LOOM::Shuttles
 {
-    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache)
+    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache, LoomSettings settings)
     {
         SDL_RenderClear(renderer);
 
@@ -49,6 +50,19 @@ namespace LOOM::Shuttles
 
             SDL_Rect dest = { destX, destY, destWidth, destHeight };
             SDL_RenderCopyEx(renderer, texture, &src, &dest, transform.rotation, nullptr, pattern.flip);
+        }
+
+        if (settings.drawColliderOutlines)
+        {
+            auto view = frame.view<Fibers::Transform, Fibers::BoxCollider>();
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            view.each([&](entt::entity entity, Fibers::Transform& transform, Fibers::BoxCollider& collider) {
+                float left = transform.position.x + collider.offset.x - (collider.size.x * 0.5f);
+                float top = transform.position.y + collider.offset.y - (collider.size.y * 0.5f);
+                SDL_Rect rect = { (int)left, (int)top, (int)collider.size.x, (int)collider.size.y };
+                SDL_RenderDrawRect(renderer, &rect);
+            });
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         }
 
         SDL_RenderPresent(renderer);

@@ -5,16 +5,16 @@
 #include <entt/entity/registry.hpp>
 #include <SDL.h>
 
+#include "Loom.h"
 #include "TextureCache.h"
 #include "AudioCache.h"
 
 namespace LOOM::Shuttles
 {
-    class Fabric;
-
-    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache);
+    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache, LoomSettings settings);
     void InputShuttle(entt::registry& frame, std::function<void(void)>);
     void AudioShuttle(entt::registry& frame, InternalUtilities::AudioCache& audioCache);
+    void PhysicsShuttle(entt::registry& frame, Fabric& fabric, LoomSettings settings, float deltaTime);
 }
 
 #endif

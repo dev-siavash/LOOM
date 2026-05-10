@@ -6,6 +6,7 @@
 #include <functional>
 #include <SDL.h>
 
+#include "Vector.h"
 #include "TextureCache.h"
 #include "AudioCache.h"
 #include "Fabric.h"
@@ -16,7 +17,8 @@ namespace LOOM
 {
     struct LoomSettings
     {
-        Math::Vector globalGravityScale = Math::Vector(0.0f, -9.8f);
+        Math::Vector globalGravityScale = Math::Vector(0.0f, 980.0f);
+        bool drawColliderOutlines = false;
     };
 
     class Loom

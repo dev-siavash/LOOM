@@ -96,21 +96,30 @@ void LOOM::Loom::Start()
 
 void LOOM::Loom::SetupInternalShuttles()
 {
-    shuttlePasses.push_back({
-        [this](float dt) {
-            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache);
-        },
-        ShuttleShed::Render, 0 });
+    // Input
     shuttlePasses.push_back({
         [this](float dt) {
             Shuttles::InputShuttle(fabric.frame, [this]() { this->delayedTermination = true; });
         },
-        ShuttleShed::PreUpdate, 0 });
+        ShuttleShed::PreUpdate, 0});
+    // Audio
     shuttlePasses.push_back({
         [this](float dt) {
             Shuttles::AudioShuttle(fabric.frame, audioCache);
         },
         ShuttleShed::PreUpdate, 1});
+    // Physics
+    shuttlePasses.push_back({
+        [this](float dt) {
+            Shuttles::PhysicsShuttle(fabric.frame, fabric, settings, dt);
+        },
+        ShuttleShed::PostUpdate, 0});
+    // Render
+    shuttlePasses.push_back({
+        [this](float dt) {
+            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings);
+        },
+        ShuttleShed::Render, 0});
 }
 
 
