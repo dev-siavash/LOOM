@@ -24,7 +24,7 @@ namespace LOOM::Shuttles
         }
 
         // Clear previous frames collision data
-        auto collisionEvent = frame.get<Fibers::CollisionEvent>(collisionEventEntity);
+        auto& collisionEvent = frame.get<Fibers::CollisionEvent>(collisionEventEntity);
         collisionEvent.collisionPairs.clear();
 
         // Calculate and apply velocity
@@ -32,7 +32,7 @@ namespace LOOM::Shuttles
         view.each([&settings, deltaTime](entt::entity entity, Fibers::Transform& transform, Fibers::PhysicsBody& physicsBody) {
             if (physicsBody.applyGravity)
                 physicsBody.velocity += settings.globalGravityScale * deltaTime;
-            physicsBody.velocity *= (1.0f - physicsBody.drag * deltaTime);
+            physicsBody.velocity /= 1.0f + physicsBody.drag * deltaTime;
             transform.position += physicsBody.velocity * deltaTime;
         });
 
