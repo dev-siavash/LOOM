@@ -19,9 +19,8 @@ namespace LOOM
             std::vector<Tow> result;
 
             auto rawView = frame.view<Fibers...>();
-            rawView.each([&](entt::entity entity, Fibers...) {
-                result.push_back(Tow(this, entity));
-            });
+            for (auto iterator = rawView.begin(); iterator != rawView.end(); iterator++)
+                result.push_back(Tow(this, *iterator));
 
             return result;
         }
