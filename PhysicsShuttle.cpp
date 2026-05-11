@@ -120,8 +120,6 @@ namespace LOOM::Shuttles
                     resolveVelocity(physicTows[j], normal * -1.0f);
 
                     collisionEvent.collisionPairs.push_back({ physicTows[i], physicTows[j], normal });
-
-                    auto& body = physicTows[j].FetchFiber<Fibers::PhysicsBody>();
                 }
             }
         }
