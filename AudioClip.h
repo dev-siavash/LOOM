@@ -19,7 +19,17 @@ namespace LOOM::Fibers
             : path{ path }, volume{ volume }, loops{ loops } 
         {}
 
-        void Play() { playRequested = true; }
+        void Play() 
+        { 
+            if (path == "") return;
+            playRequested = true; 
+        }
+
+        void Play(std::string clipPath)
+        {
+            path = clipPath;
+            Play();
+        }
     };
 }
 
