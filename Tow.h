@@ -17,6 +17,11 @@ namespace LOOM
         }
 
         template<typename T>
+        void PlyTag() {
+            fabric->frame.emplace<T>(id);
+        }
+
+        template<typename T>
         T& FetchFiber() {
             assert(HoldsFiber<T>());
             return fabric->frame.get<T>(id);
