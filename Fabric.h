@@ -2,6 +2,7 @@
 #define FABRIC_H
 
 #include <vector>
+#include <optional>
 #include <entt/entt.hpp>
 
 namespace LOOM
@@ -26,8 +27,10 @@ namespace LOOM
         }
 
         template<typename ...Fibers>
-        Tow FetchTowOf() {
+        std::optional<Tow> FetchTowOf() {
             auto rawView = frame.view<Fibers...>();
+            if (rawView.empty())
+                return std::nullopt;
             return Tow(this, rawView.front());
         }
 
