@@ -19,4 +19,7 @@
 #include "Fabric.h"
 #include "Tow.h"
 
+// Undefine SDL defined main symbol to avoid errors
+#undef main
+
 #endif
