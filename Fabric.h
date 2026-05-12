@@ -12,6 +12,13 @@ namespace LOOM
         friend class Loom;
         friend class Tow;
     public:
+        Fabric() {} 
+
+        Fabric(const Fabric&) = delete;
+        Fabric(Fabric&&) = delete;
+        Fabric& operator=(const Fabric&) = delete;
+        Fabric& operator=(Fabric&&) = delete;
+
         Tow CreateTow();
         void UnwindTow(Tow);
 
