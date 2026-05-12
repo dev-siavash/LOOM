@@ -8,23 +8,9 @@ using namespace LOOM::InternalUtilities;
 
 namespace LOOM::Shuttles
 {
-    void AudioShuttle(entt::registry& frame, AudioCache& audioCache)
+    void AudioShuttle(entt::registry& frame, Fibers::MusicPlayer& musicPlayer, AudioCache& audioCache)
     {
-        static entt::entity musicPlayerEntity = entt::null;
-        if (musicPlayerEntity == entt::null)
-        {
-            auto view = frame.view<Fibers::MusicPlayer>();
-            if (view.empty())
-            {
-                musicPlayerEntity = frame.create();
-                frame.emplace<Fibers::MusicPlayer>(musicPlayerEntity);
-            }
-            else
-                musicPlayerEntity = view.front();
-        }
-
         // Music handling
-        auto& musicPlayer = frame.get<Fibers::MusicPlayer>(musicPlayerEntity);
         auto music = audioCache.GetMusic(musicPlayer.musicPath);
         if (music != nullptr)
         {

@@ -6,22 +6,8 @@ using namespace LOOM::InternalUtilities;
 
 namespace LOOM::Shuttles
 {
-    void InputShuttle(entt::registry& frame, std::function<void(void)> terminateCallback)
+    void InputShuttle(entt::registry& frame, Fibers::InputState& inputState, std::function<void(void)> terminateCallback)
     {
-        static entt::entity inputEntity = entt::null;
-        if (inputEntity == entt::null)
-        {
-            auto view = frame.view<Fibers::InputState>();
-            if (view.empty())
-            {
-                inputEntity = frame.create();
-                frame.emplace<Fibers::InputState>(inputEntity);
-            }
-            else
-                inputEntity = view.front();
-        }
-
-        auto& inputState = frame.get<Fibers::InputState>(inputEntity);
         inputState.prevKeyStates = inputState.keyStates;
         for (size_t i = 0; i < 3; i++)
             inputState.prevMouseButtonStates[i] = inputState.mouseButtonStates[i];

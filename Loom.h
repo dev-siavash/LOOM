@@ -10,6 +10,7 @@
 #include "TextureCache.h"
 #include "AudioCache.h"
 #include "Fabric.h"
+#include "Tow.h"
 #include "ShuttleShed.h"
 #include "ShuttlePass.h"
 
@@ -24,6 +25,8 @@ namespace LOOM
     class Loom
     {
     public:
+        Loom() : serviceProvider{ fabric.CreateTow() } { }
+
         bool Initialize(const std::string& title, bool fullscreen, int screenWidth, int screenHeight);
         void Terminate();
 
@@ -35,7 +38,7 @@ namespace LOOM
         void AddShuttle(Shuttle shuttle, ShuttleShed shed, int order = 0) {
             shuttlePasses.push_back({ 
                 [this, shuttle](float deltaTime) { 
-                    shuttle(fabric, deltaTime); 
+                    shuttle(fabric, serviceProvider, deltaTime); 
                 }, shed, order});
         }
 
@@ -53,6 +56,7 @@ namespace LOOM
         int screenHeight = 600;
 
         Fabric fabric;
+        Tow serviceProvider;
         InternalUtilities::TextureCache textureCache;
         InternalUtilities::AudioCache audioCache;
 

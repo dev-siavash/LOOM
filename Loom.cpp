@@ -3,8 +3,9 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
-#include "InputState.h"
 #include "MusicPlayer.h"
+#include "InputState.h"
+#include "CollisionEvent.h"
 #include "InternalShuttles.h"
 #include "Loom.h"
 
@@ -34,8 +35,6 @@ bool LOOM::Loom::Initialize(const std::string& title, bool fullScreen, int scree
         throw std::runtime_error(msg);
     }
 
-    // TODO: Init IMG and Mixer 
-
     window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, windowFlags);
     if (!window)
         return false;
@@ -51,6 +50,10 @@ bool LOOM::Loom::Initialize(const std::string& title, bool fullScreen, int scree
         this->screenWidth = screenWidth;
         this->screenHeight = screenHeight;
     }
+
+    serviceProvider.PlyFiber<Fibers::MusicPlayer>();
+    serviceProvider.PlyFiber<Fibers::InputState>();
+    serviceProvider.PlyFiber<Fibers::CollisionEvent>();
 
     lastTime = SDL_GetPerformanceCounter();
     SetupInternalShuttles();
@@ -99,19 +102,19 @@ void LOOM::Loom::SetupInternalShuttles()
     // Input
     shuttlePasses.push_back({
         [this](float dt) {
-            Shuttles::InputShuttle(fabric.frame, [this]() { this->delayedTermination = true; });
+            Shuttles::InputShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
         },
         ShuttleShed::PreUpdate, 0});
     // Audio
     shuttlePasses.push_back({
         [this](float dt) {
-            Shuttles::AudioShuttle(fabric.frame, audioCache);
+            Shuttles::AudioShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::MusicPlayer>(), audioCache);
         },
         ShuttleShed::PreUpdate, 1});
     // Physics
     shuttlePasses.push_back({
         [this](float dt) {
-            Shuttles::PhysicsShuttle(fabric.frame, fabric, settings, dt);
+            Shuttles::PhysicsShuttle(fabric.frame, fabric, serviceProvider.FetchFiber<Fibers::CollisionEvent>(), settings, dt);
         },
         ShuttleShed::PostUpdate, 0});
     // Render
@@ -121,12 +124,3 @@ void LOOM::Loom::SetupInternalShuttles()
         },
         ShuttleShed::Render, 0});
 }
-
-
-
-
-
-
-
-
-

@@ -8,23 +8,9 @@
 
 namespace LOOM::Shuttles
 {
-    void PhysicsShuttle(entt::registry& frame, Fabric& fabric, LoomSettings settings, float deltaTime)
+    void PhysicsShuttle(entt::registry& frame, Fabric& fabric, Fibers::CollisionEvent& collisionEvent, LoomSettings settings, float deltaTime)
     {
-        static entt::entity collisionEventEntity = entt::null;
-        if (collisionEventEntity == entt::null)
-        {
-            auto view = frame.view<Fibers::CollisionEvent>();
-            if (view.empty())
-            {
-                collisionEventEntity = frame.create();
-                frame.emplace<Fibers::CollisionEvent>(collisionEventEntity);
-            }
-            else
-                collisionEventEntity = view.front();
-        }
-
         // Clear previous frames collision data
-        auto& collisionEvent = frame.get<Fibers::CollisionEvent>(collisionEventEntity);
         collisionEvent.collisionPairs.clear();
 
         // Calculate and apply velocity
