@@ -89,7 +89,7 @@ void LOOM::Loom::Start()
         lastTime = currentTime;
 
         for (auto& pass : shuttlePasses)
-            pass.shuttle(deltaTime);
+            pass.shuttle(fabric, serviceProvider, deltaTime);
 
         if (delayedTermination)
             Terminate();
@@ -97,29 +97,35 @@ void LOOM::Loom::Start()
 
 }
 
+void LOOM::Loom::AddShuttle(std::function<void(Fabric&, Tow, float)> shuttle, ShuttleShed shed, float deltaTime)
+{
+    ShuttlePass pass = { shuttle, shed, deltaTime };
+    shuttlePasses.push_back(pass);
+}
+
 void LOOM::Loom::SetupInternalShuttles()
 {
     // Input
     shuttlePasses.push_back({
-        [this](float dt) {
+        [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::InputShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
         },
         ShuttleShed::PreUpdate, 0});
     // Audio
     shuttlePasses.push_back({
-        [this](float dt) {
+        [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::AudioShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::MusicPlayer>(), audioCache);
         },
         ShuttleShed::PreUpdate, 1});
     // Physics
     shuttlePasses.push_back({
-        [this](float dt) {
+        [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::PhysicsShuttle(fabric.frame, fabric, serviceProvider.FetchFiber<Fibers::CollisionEvent>(), settings, dt);
         },
         ShuttleShed::PostUpdate, 0});
     // Render
     shuttlePasses.push_back({
-        [this](float dt) {
+        [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector(screenWidth, screenHeight));
         },
         ShuttleShed::Render, 0});

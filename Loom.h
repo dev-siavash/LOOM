@@ -34,13 +34,7 @@ namespace LOOM
         void Stop() { isRunning = false; }
 
         // TODO: Handle whether shuttles can be added at runtime or not.
-        template<typename Shuttle>
-        void AddShuttle(Shuttle shuttle, ShuttleShed shed, int order = 0) {
-            shuttlePasses.push_back({ 
-                [this, shuttle](float deltaTime) { 
-                    shuttle(fabric, serviceProvider, deltaTime); 
-                }, shed, order});
-        }
+        void AddShuttle(std::function<void(Fabric&, Tow, float)>, ShuttleShed, float);
 
         Fabric& GetFabric() { return fabric; }
         LoomSettings& Settings() { return settings; }
