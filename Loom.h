@@ -37,6 +37,7 @@ namespace LOOM
         void RemoveShuttle(std::string name);
 
         Fabric& GetFabric() { return fabric; }
+        Tow Services() { return serviceProvider; }
         LoomSettings& Settings() { return settings; }
 
         bool IsRunning() const { return isRunning; }
