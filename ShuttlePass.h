@@ -9,6 +9,7 @@ namespace LOOM
 {
     struct ShuttlePass
     {
+        std::string name;
         std::function<void(Fabric&, Tow, float)> shuttle;
         ShuttleShed shed;
         int order = 0;

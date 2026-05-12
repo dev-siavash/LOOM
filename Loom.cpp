@@ -91,48 +91,88 @@ void LOOM::Loom::Start()
         for (auto& pass : shuttlePasses)
             pass.shuttle(fabric, serviceProvider, deltaTime);
 
+        if (shuttlePassesToAdd.size() > 0)
+        {
+            for (auto& pass : shuttlePassesToAdd)
+                shuttlePasses.push_back(pass);
+            shuttlePassesToAdd.clear();
+        }
+
+        if (shuttlePassNamesToRemove.size() > 0)
+        {
+            for (auto& name : shuttlePassNamesToRemove)
+            {
+                shuttlePasses.erase(std::remove_if(shuttlePasses.begin(), shuttlePasses.end(), 
+                    [&name](ShuttlePass pass) { return pass.name == name; }), shuttlePasses.end());
+            }
+
+            shuttlePassNamesToRemove.clear();
+        }
+
         if (delayedTermination)
             Terminate();
     }
-
 }
 
-void LOOM::Loom::AddShuttle(std::function<void(Fabric&, Tow, float)> shuttle, ShuttleShed shed, float deltaTime)
+void LOOM::Loom::AddShuttle(decltype(ShuttlePass::shuttle) shuttle, ShuttleShed shed, int order, std::string name)
 {
-    ShuttlePass pass = { shuttle, shed, deltaTime };
-    shuttlePasses.push_back(pass);
+    ShuttlePass pass = { name, shuttle, shed, order };
+
+    if (!isRunning)
+        shuttlePasses.push_back(pass);
+    else
+        shuttlePassesToAdd.push_back(pass);
+}
+
+void LOOM::Loom::RemoveShuttle(std::string name)
+{
+    if (name == "")
+        return;
+
+    if (!isRunning)
+    {
+        shuttlePasses.erase(std::remove_if(shuttlePasses.begin(), shuttlePasses.end(),
+            [&name](ShuttlePass pass) { return pass.name == name; }), shuttlePasses.end());
+    }
+    else
+        shuttlePassNamesToRemove.push_back(name);
 }
 
 void LOOM::Loom::SetupInternalShuttles()
 {
     // Input
     shuttlePasses.push_back({
+        "LOOMInputShuttle",
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::InputShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
         },
-        ShuttleShed::PreUpdate, 0});
+        ShuttleShed::PreUpdate, 0 });
     // Audio
     shuttlePasses.push_back({
+        "LOOMAudioShuttle",
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::AudioShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::MusicPlayer>(), audioCache);
         },
-        ShuttleShed::PreUpdate, 1});
+        ShuttleShed::PreUpdate, 1 });
     // UI
     shuttlePasses.push_back({
+        "LOOMUIUpdateShuttle",
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::UIUpdateShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), Math::Vector(screenWidth, screenHeight));
         },
-        ShuttleShed::PostUpdate, 0});
+        ShuttleShed::PostUpdate, 0 });
     // Physics
     shuttlePasses.push_back({
+        "LOOMPhyicsShuttle",
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::PhysicsShuttle(fabric.frame, fabric, serviceProvider.FetchFiber<Fibers::CollisionEvent>(), settings, dt);
         },
-        ShuttleShed::PostUpdate, 1});
+        ShuttleShed::PostUpdate, 1 });
     // Render
     shuttlePasses.push_back({
+        "LOOMRenderShuttle",
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector(screenWidth, screenHeight));
         },
-        ShuttleShed::Render, 0});
+        ShuttleShed::Render, 0 });
 }

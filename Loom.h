@@ -25,7 +25,7 @@ namespace LOOM
     class Loom
     {
     public:
-        Loom() : serviceProvider{ fabric.CreateTow() } { }
+        Loom() : serviceProvider{ fabric.CreateTow() } {}
 
         bool Initialize(const std::string& title, bool fullscreen, int screenWidth, int screenHeight);
         void Terminate();
@@ -33,8 +33,8 @@ namespace LOOM
         void Start();
         void Stop() { isRunning = false; }
 
-        // TODO: Handle whether shuttles can be added at runtime or not.
-        void AddShuttle(std::function<void(Fabric&, Tow, float)>, ShuttleShed, float);
+        void AddShuttle(decltype(ShuttlePass::shuttle), ShuttleShed, int, std::string name = "");
+        void RemoveShuttle(std::string name);
 
         Fabric& GetFabric() { return fabric; }
         LoomSettings& Settings() { return settings; }
@@ -55,6 +55,8 @@ namespace LOOM
         InternalUtilities::AudioCache audioCache;
 
         std::vector<ShuttlePass> shuttlePasses;
+        std::vector<ShuttlePass> shuttlePassesToAdd;
+        std::vector<std::string> shuttlePassNamesToRemove;
 
         LoomSettings settings;
 
