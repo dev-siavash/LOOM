@@ -66,7 +66,14 @@ namespace LOOM::Shuttles
                         mtv.x = 0.0f;
                     }
 
+                    // Skip collision velocity and position correction if one of the tows is trigger
+                    if (physicTows[i].FetchFiber<Fibers::BoxCollider>().isTrigger || physicTows[j].FetchFiber<Fibers::BoxCollider>().isTrigger)
+                    {
+                        collisionEvent.collisionPairs.push_back({ physicTows[i], physicTows[j], mtv.normalized() });
+                        continue;
+                    }
 
+                    // Collision velocity and position correction
                     bool aDynamic = physicTows[i].HoldsFiber<Fibers::PhysicsBody>();
                     bool bDynamic = physicTows[j].HoldsFiber<Fibers::PhysicsBody>();
                     if (aDynamic || bDynamic)
