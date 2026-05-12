@@ -11,10 +11,14 @@
 
 namespace LOOM::Shuttles
 {
-    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache, LoomSettings settings);
-    void InputShuttle(entt::registry& frame, std::function<void(void)>);
-    void AudioShuttle(entt::registry& frame, InternalUtilities::AudioCache& audioCache);
-    void PhysicsShuttle(entt::registry& frame, Fabric& fabric, LoomSettings settings, float deltaTime);
+    void RenderShuttle
+        (entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache, LoomSettings settings, Math::Vector screenDimensions);
+    void InputShuttle
+        (entt::registry& frame, std::function<void(void)>);
+    void AudioShuttle
+        (entt::registry& frame, InternalUtilities::AudioCache& audioCache);
+    void PhysicsShuttle
+        (entt::registry& frame, Fabric& fabric, LoomSettings settings, float deltaTime);
 }
 
 #endif

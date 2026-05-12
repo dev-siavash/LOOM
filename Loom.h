@@ -17,7 +17,7 @@ namespace LOOM
 {
     struct LoomSettings
     {
-        Math::Vector globalGravityScale = Math::Vector(0.0f, 980.0f);
+        Math::Vector globalGravityScale = Math::Vector(0.0f, -980.0f);
         bool drawColliderOutlines = false;
     };
 

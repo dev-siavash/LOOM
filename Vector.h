@@ -81,21 +81,21 @@ namespace LOOM::Math {
             return (this->x == other.x) && (this->y == other.y);
         }
         
-        static constexpr Vector up()               noexcept { return { 0, -1 }; }
-        static constexpr Vector down()             noexcept { return { 0, 1 }; }
+        static constexpr Vector up()               noexcept { return { 0, 1 }; }
+        static constexpr Vector down()             noexcept { return { 0, -1 }; }
         static constexpr Vector left()             noexcept { return { -1, 0 }; }
         static constexpr Vector right()            noexcept { return { 1, 0 }; }
         static constexpr Vector one()              noexcept { return { 1, 1 }; }
         static constexpr Vector zero()             noexcept { return { 0, 0 }; }
-        static constexpr Vector pivotUpLeft()      noexcept { return { 0, 0 }; }
-        static constexpr Vector pivotUpCenter()    noexcept { return { 0.5, 0 }; }
-        static constexpr Vector pivotUpRight()     noexcept { return { 1, 0 }; }
-        static constexpr Vector pivotCenterLeft()  noexcept { return { 0, 0.5 }; }
-        static constexpr Vector pivotCenter()      noexcept { return { 0.5, 0.5 }; }
-        static constexpr Vector pivotCenterRight() noexcept { return { 1, 0.5 }; }
-        static constexpr Vector pivotDownLeft()    noexcept { return { 0, 1 }; }
-        static constexpr Vector pivotDownCenter()  noexcept { return { 0.5, 1 }; }
-        static constexpr Vector pivotDownRight()   noexcept { return { 1, 1 }; }
+        static constexpr Vector pivotUpLeft()      noexcept { return { -0.5, 0.5 }; }
+        static constexpr Vector pivotUpCenter()    noexcept { return { 0, 0.5 }; }
+        static constexpr Vector pivotUpRight()     noexcept { return { 0.5, 0.5 }; }
+        static constexpr Vector pivotCenterLeft()  noexcept { return { -0.5, 0 }; }
+        static constexpr Vector pivotCenter()      noexcept { return { 0, 0 }; }
+        static constexpr Vector pivotCenterRight() noexcept { return { 0.5, 0 }; }
+        static constexpr Vector pivotDownLeft()    noexcept { return { -0.5, -0.5 }; }
+        static constexpr Vector pivotDownCenter()  noexcept { return { 0, -0.5 }; }
+        static constexpr Vector pivotDownRight()   noexcept { return { 0.5, -0.5 }; }
     }; 
 }
 

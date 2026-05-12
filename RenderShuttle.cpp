@@ -5,12 +5,13 @@
 #include "Pattern.h"
 #include "BoxCollider.h"
 #include "InternalShuttles.h"
+#include "InternalFunctions.h"
 
 using namespace LOOM::InternalUtilities;
 
 namespace LOOM::Shuttles
 {
-    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache, LoomSettings settings)
+    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache, LoomSettings settings, Math::Vector screenDimensions)
     {
         SDL_RenderClear(renderer);
 
@@ -45,8 +46,9 @@ namespace LOOM::Shuttles
             auto destWidth = (int)(src.w * transform.scale.x);
             auto destHeight = (int)(src.h * transform.scale.y);
 
-            auto destX = (int)(transform.position.x - destWidth * pattern.pivot.x);
-            auto destY = (int)(transform.position.y - destHeight * pattern.pivot.y);
+            auto screenPosition = WorldToScreenPosition(transform.position, screenDimensions);
+            auto destX = (int)(screenPosition.x - destWidth * pattern.pivot.x);
+            auto destY = (int)(screenPosition.y - destHeight * pattern.pivot.y);
 
             SDL_Rect dest = { destX, destY, destWidth, destHeight };
             SDL_RenderCopyEx(renderer, texture, &src, &dest, transform.rotation, nullptr, pattern.flip);
@@ -57,8 +59,9 @@ namespace LOOM::Shuttles
             auto view = frame.view<Fibers::Transform, Fibers::BoxCollider>();
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
             view.each([&](entt::entity entity, Fibers::Transform& transform, Fibers::BoxCollider& collider) {
-                float left = transform.position.x + collider.offset.x - (collider.size.x * 0.5f);
-                float top = transform.position.y + collider.offset.y - (collider.size.y * 0.5f);
+                auto screenPosition = WorldToScreenPosition(transform.position, screenDimensions);
+                float left = screenPosition.x + collider.offset.x - (collider.size.x * 0.5f);
+                float top = screenPosition.y + collider.offset.y - (collider.size.y * 0.5f);
                 SDL_Rect rect = { (int)left, (int)top, (int)collider.size.x, (int)collider.size.y };
                 SDL_RenderDrawRect(renderer, &rect);
             });

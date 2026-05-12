@@ -117,7 +117,7 @@ void LOOM::Loom::SetupInternalShuttles()
     // Render
     shuttlePasses.push_back({
         [this](float dt) {
-            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings);
+            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector(screenWidth, screenHeight));
         },
         ShuttleShed::Render, 0});
 }
