@@ -117,12 +117,18 @@ void LOOM::Loom::SetupInternalShuttles()
             Shuttles::AudioShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::MusicPlayer>(), audioCache);
         },
         ShuttleShed::PreUpdate, 1});
+    // UI
+    shuttlePasses.push_back({
+        [this](Fabric& fabric, Tow serviceProvider, float dt) {
+            Shuttles::UIUpdateShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), Math::Vector(screenWidth, screenHeight));
+        },
+        ShuttleShed::PostUpdate, 0});
     // Physics
     shuttlePasses.push_back({
         [this](Fabric& fabric, Tow serviceProvider, float dt) {
             Shuttles::PhysicsShuttle(fabric.frame, fabric, serviceProvider.FetchFiber<Fibers::CollisionEvent>(), settings, dt);
         },
-        ShuttleShed::PostUpdate, 0});
+        ShuttleShed::PostUpdate, 1});
     // Render
     shuttlePasses.push_back({
         [this](Fabric& fabric, Tow serviceProvider, float dt) {

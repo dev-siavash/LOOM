@@ -22,6 +22,8 @@ namespace LOOM::Shuttles
         (entt::registry& frame, Fibers::MusicPlayer& musicPlayer, InternalUtilities::AudioCache& audioCache);
     void PhysicsShuttle
         (entt::registry& frame, Fabric& fabric, Fibers::CollisionEvent& collisionEvent, LoomSettings settings, float deltaTime);
+    void UIUpdateShuttle
+        (entt::registry& frame, Fibers::InputState& inputState, Math::Vector screenDimensions);
 }
 
 #endif

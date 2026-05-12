@@ -5,6 +5,8 @@
 
 #include "MusicPlayer.h"
 #include "InputState.h"
+#include "Hoverable.h"
+#include "Clickable.h"
 #include "AudioClip.h"
 #include "Transform.h"
 #include "BoxCollider.h"
