@@ -65,10 +65,15 @@ void LOOM::Loom::Terminate()
 {
     isRunning = false;
     fabric.Clear();
+    textureCache.Clear();
+    audioCache.ClearChunkCache();
+    audioCache.ClearMusicCache();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    Mix_CloseAudio();
     IMG_Quit();
     SDL_Quit();
+
 }
 
 void LOOM::Loom::Start()
