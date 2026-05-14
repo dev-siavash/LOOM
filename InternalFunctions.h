@@ -1,13 +1,11 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#include <typeindex>
 #include <SDL.h>
 
+#include "FiberTypeId.h"
 #include "Vector.h"
 #include "KeyCode.h"
-
-using FiberTypeId = std::type_index;
 
 namespace LOOM::InternalUtilities
 {
