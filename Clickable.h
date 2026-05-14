@@ -18,6 +18,22 @@ namespace LOOM::Fibers
             return wasHeldLastFrame && !isHeld;
         }
     };
+
+    template<>
+    struct FiberTraits<Clickable>
+    {
+        static constexpr bool Serializable = true;
+        static constexpr bool IsTag = false;
+
+        static void Save(InternalUtilities::BinaryWriter& writer, const Clickable& c)
+        {
+        }
+
+        static Clickable Load(InternalUtilities::BinaryReader& reader)
+        {
+            return Clickable();
+        }
+    };
 }
 
 #endif

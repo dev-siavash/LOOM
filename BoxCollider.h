@@ -18,6 +18,33 @@ namespace LOOM::Fibers
             : size{ size }, offset{ offset }, isTrigger{ isTrigger } 
         {}
     };
+
+    template<>
+    struct FiberTraits<BoxCollider>
+    {
+        static constexpr bool Serializable = true;
+        static constexpr bool IsTag = false;
+
+        static void Save(InternalUtilities::BinaryWriter& writer, const BoxCollider& bc)
+        {
+            writer.Write(bc.size.x);
+            writer.Write(bc.size.y);
+            writer.Write(bc.offset.x);
+            writer.Write(bc.offset.y);
+            writer.Write(bc.isTrigger);
+        }
+
+        static BoxCollider Load(InternalUtilities::BinaryReader& reader)
+        {
+            BoxCollider bc;
+            reader.Read(bc.size.x);
+            reader.Read(bc.size.y);
+            reader.Read(bc.offset.x);
+            reader.Read(bc.offset.y);
+            reader.Read(bc.isTrigger);
+            return bc;
+        }
+    };
 }
 
 #endif

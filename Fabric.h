@@ -1,12 +1,23 @@
 #ifndef FABRIC_H
 #define FABRIC_H
 
+#include <typeindex>
+#include <unordered_map>
 #include <vector>
+#include <string>
 #include <optional>
 #include <entt/entt.hpp>
 
+#include "InternalFunctions.h"
+#include "BinaryReader.h"
+#include "FiberTraits.h"
+#include "FiberRegistryEntry.h"
+#include "Prefab.h"
+
 namespace LOOM
 {
+    class PrefabBuilder;
+
     class Fabric
     {
         friend class Loom;
@@ -41,12 +52,28 @@ namespace LOOM
             return Tow(this, rawView.front());
         }
 
+        void RegisterPrefab(std::string name, Prefab prefab)
+        {
+            prefabs[name] = prefab;
+        }
+
+        Tow& SpawnPrefab(const std::string& name);
+
+        template<typename T>
+        void RegisterFiber();
+
+        PrefabBuilder PreFabricate(std::string name);
+
         void Clear();
 
     private:
         entt::registry frame;
+        std::unordered_map<std::string, Prefab> prefabs;
+        std::unordered_map<std::type_index, FiberRegistryEntry> fiberRegistry;
     };
 }
+
+#include "FabricTow.hpp"
 
 #endif
 

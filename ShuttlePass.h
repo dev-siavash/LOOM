@@ -7,6 +7,8 @@
 
 namespace LOOM
 {
+    class Loom;
+
     struct ShuttlePass
     {
         std::string name;
