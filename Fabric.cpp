@@ -10,7 +10,7 @@ void LOOM::Fabric::UnwindTow(Tow tow) {
     frame.destroy(tow.id);
 }
 
-LOOM::Tow& LOOM::Fabric::SpawnPrefab(const std::string& name)
+LOOM::Tow LOOM::Fabric::SpawnPrefab(const std::string& name)
 {
     auto prefabIt = prefabs.find(name);
     if (prefabIt == prefabs.end())

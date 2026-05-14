@@ -57,7 +57,7 @@ namespace LOOM
             prefabs[name] = prefab;
         }
 
-        Tow& SpawnPrefab(const std::string& name);
+        Tow SpawnPrefab(const std::string& name);
 
         template<typename T>
         void RegisterFiber();
