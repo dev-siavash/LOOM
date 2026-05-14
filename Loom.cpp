@@ -96,6 +96,13 @@ void LOOM::Loom::Start()
             for (auto& pass : shuttlePassesToAdd)
                 shuttlePasses.push_back(pass);
             shuttlePassesToAdd.clear();
+
+            std::sort(shuttlePasses.begin(), shuttlePasses.end(),
+                [](const ShuttlePass& a, const ShuttlePass& b) {
+                    if (a.shed != b.shed)
+                        return static_cast<int>(a.shed) < static_cast<int>(b.shed);
+                    return a.order < b.order;
+                });
         }
 
         if (shuttlePassNamesToRemove.size() > 0)
