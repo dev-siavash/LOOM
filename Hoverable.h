@@ -14,7 +14,7 @@ namespace LOOM::Fibers
 
         bool IsHovered() const
         {
-            return wasHoveredLastFrame && isHovered;
+            return isHovered;
         }
 
         bool EnteredHover() const
