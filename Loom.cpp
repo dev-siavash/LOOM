@@ -114,9 +114,9 @@ void LOOM::Loom::Start()
     }
 }
 
-void LOOM::Loom::AddShuttle(decltype(ShuttlePass::shuttle) shuttle, ShuttleShed shed, int order, std::string name)
+void LOOM::Loom::AddShuttle(ShuttlePass::Shuttle shuttle, ShuttleShed shed, int order, std::string name)
 {
-    ShuttlePass pass = { name, shuttle, shed, order };
+    ShuttlePass pass(name, shuttle, shed, order);
 
     if (!isRunning)
         shuttlePasses.push_back(pass);

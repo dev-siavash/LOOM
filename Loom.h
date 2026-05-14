@@ -33,8 +33,25 @@ namespace LOOM
         void Start();
         void Stop() { isRunning = false; }
 
-        void AddShuttle(decltype(ShuttlePass::shuttle), ShuttleShed, int, std::string name = "");
+        void AddShuttle(ShuttlePass::Shuttle, ShuttleShed, int, std::string name = "");
         void RemoveShuttle(std::string name);
+
+        template<typename ...Fibers>
+        void AddQueryShuttle(ShuttlePass::QueryShuttle queryShuttle, ShuttleShed shed, int order, std::string name = "")
+        {
+            ShuttlePass::Shuttle shuttle = [queryShuttle](Loom& loom, float dt) {
+                auto tows = loom.GetFabric().FetchAllTowsOf<Fibers...>();
+                if (!tows.empty())
+                    queryShuttle(loom, tows, dt);
+            };
+
+            ShuttlePass pass(name, shuttle, shed, order);
+
+            if (!isRunning)
+                shuttlePasses.push_back(pass);
+            else
+                shuttlePassesToAdd.push_back(pass);
+        }
 
         Fabric& GetFabric() { return fabric; }
         Tow Services() { return serviceProvider; }
