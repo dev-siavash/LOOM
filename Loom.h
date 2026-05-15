@@ -37,7 +37,7 @@ namespace LOOM
         void RemoveShuttle(std::string name);
 
         template<typename ...Fibers>
-        void AddQueryShuttle(ShuttlePass::QueryShuttle queryShuttle, ShuttleShed shed, int order, std::string name = "")
+        void AddBoundShuttle(ShuttlePass::QueryShuttle queryShuttle, ShuttleShed shed, int order, std::string name = "")
         {
             ShuttlePass::Shuttle shuttle = [queryShuttle](Loom& loom, float dt) {
                 auto tows = loom.GetFabric().FetchAllTowsOf<Fibers...>();
