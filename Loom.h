@@ -44,12 +44,12 @@ namespace LOOM
         T& GetService() { return serviceProvider.FetchFiber<T>(); }
 
         template<typename ...Fibers>
-        void AddBoundShuttle(ShuttlePass::QueryShuttle queryShuttle, ShuttleShed shed, int order, std::string name = "")
+        void AddBoundShuttle(ShuttlePass::BoundShuttle boundShuttle, ShuttleShed shed, int order, std::string name = "")
         {
-            ShuttlePass::Shuttle shuttle = [queryShuttle](Loom& loom, float dt) {
+            ShuttlePass::Shuttle shuttle = [boundShuttle](Loom& loom, float dt) {
                 auto tows = loom.GetFabric().FetchAllTowsOf<Fibers...>();
                 if (!tows.empty())
-                    queryShuttle(loom, tows, dt);
+                    boundShuttle(loom, tows, dt);
             };
 
             ShuttlePass pass(name, shuttle, shed, order);

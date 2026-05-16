@@ -15,7 +15,7 @@ namespace LOOM
     struct ShuttlePass
     {
         using Shuttle = std::function<void(Loom&, float)>;
-        using QueryShuttle = std::function<void(Loom&, std::vector<Tow>, float)>;
+        using BoundShuttle = std::function<void(Loom&, std::vector<Tow>&, float)>;
 
         std::string name;
         Shuttle shuttle;
