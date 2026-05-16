@@ -41,8 +41,8 @@ namespace LOOM::Shuttles
         }
 
         // Sound Effects Handling
-        auto view = frame.view<Fibers::AudioClip>();
-        view.each([&audioCache](entt::entity entity, Fibers::AudioClip& audioClip) {
+        auto view = frame.view<Fibers::AudioPlayer>();
+        view.each([&audioCache](entt::entity entity, Fibers::AudioPlayer& audioClip) {
             auto chunk = audioCache.GetChunk(audioClip.path);
             if (chunk == nullptr)
                 return;

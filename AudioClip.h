@@ -9,14 +9,14 @@
 
 namespace LOOM::Fibers
 {
-    struct AudioClip
+    struct AudioPlayer
     {
         std::string path;
         float volume;
         int loops;
         bool playRequested = false;
 
-        AudioClip(
+        AudioPlayer(
             std::string path = "",
             float volume = 1.0f,
             int loops = 0)
@@ -37,21 +37,21 @@ namespace LOOM::Fibers
     };
 
     template<>
-    struct FiberTraits<AudioClip>
+    struct FiberTraits<AudioPlayer>
     {
         static constexpr bool Serializable = true;
         static constexpr bool IsTag = false;
 
-        static void Save(InternalUtilities::BinaryWriter& writer, const AudioClip& a)
+        static void Save(InternalUtilities::BinaryWriter& writer, const AudioPlayer& a)
         {
             writer.Write(a.path);
             writer.Write(a.volume);
             writer.Write(a.loops);
         }
 
-        static AudioClip Load(InternalUtilities::BinaryReader& reader)
+        static AudioPlayer Load(InternalUtilities::BinaryReader& reader)
         {
-            AudioClip a;
+            AudioPlayer a;
             reader.Read(a.path);
             reader.Read(a.volume);
             reader.Read(a.loops);
