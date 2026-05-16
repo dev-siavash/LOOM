@@ -30,7 +30,6 @@ namespace LOOM::Shuttles
         // Update clickables
         auto cView = frame.view<Fibers::Transform, Fibers::BoxCollider, Fibers::Clickable>();
         cView.each([&](entt::entity entity, Fibers::Transform& transform, Fibers::BoxCollider& collider, Fibers::Clickable& clickable) {
-            clickable.wasHeldLastFrame = clickable.isHeld;
             // Calculate bounds and hoverability
             bool isHovered = false;
             if (auto hoverable = frame.try_get<Fibers::Hoverable>(entity))
@@ -44,8 +43,13 @@ namespace LOOM::Shuttles
                 auto top = center.y + (collider.size.y / 2.0f);
                 isHovered = mousePosition.x >= left && mousePosition.x <= right && mousePosition.y >= bottom && mousePosition.y <= top;
             }
-            bool anyButtonDown = inputState.IsMouseButtonDown(0) || inputState.IsMouseButtonDown(1) || inputState.IsMouseButtonDown(2);
-            clickable.isHeld = isHovered && anyButtonDown;
+
+            bool anyButtonDown =
+                inputState.IsMouseButtonPressed(0)
+                || inputState.IsMouseButtonPressed(1)
+                || inputState.IsMouseButtonPressed(2);
+
+            clickable.isClicked = isHovered && anyButtonDown;
         });
     }
 }

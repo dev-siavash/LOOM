@@ -5,17 +5,11 @@ namespace LOOM::Fibers
 {
     struct Clickable
     {
-        bool wasHeldLastFrame = false;
-        bool isHeld = false;
+        bool isClicked = false;
 
         bool IsClicked() const
         {
-            return !wasHeldLastFrame && isHeld;
-        }
-
-        bool IsReleased() const
-        {
-            return wasHeldLastFrame && !isHeld;
+            return isClicked;
         }
     };
 
