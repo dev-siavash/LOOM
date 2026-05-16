@@ -52,6 +52,15 @@ namespace LOOM
             return Tow(this, rawView.front());
         }
 
+        template<typename T>
+        T* FirstFiber() {
+            auto rawView = frame.view<T>();
+            if (rawView.empty())
+                return nullptr;
+
+            return &(frame.get<T>(rawView.front()));
+        }
+
         void RegisterPrefab(std::string name, Prefab prefab)
         {
             prefabs[name] = prefab;
