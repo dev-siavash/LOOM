@@ -41,7 +41,7 @@ namespace LOOM
             return *this;
         }
 
-        Prefab Build()
+        Prefab Register()
         {
             fabric->RegisterPrefab(prefab.name, prefab);
             return std::move(prefab);
