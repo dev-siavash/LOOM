@@ -36,6 +36,13 @@ namespace LOOM
         void AddShuttle(ShuttlePass::Shuttle, ShuttleShed, int, std::string name = "");
         void RemoveShuttle(std::string name);
 
+        Fabric& GetFabric() { return fabric; }
+
+        LoomSettings& Settings() { return settings; }
+
+        template<typename T>
+        T& GetService() { return serviceProvider.FetchFiber<T>(); }
+
         template<typename ...Fibers>
         void AddBoundShuttle(ShuttlePass::QueryShuttle queryShuttle, ShuttleShed shed, int order, std::string name = "")
         {
@@ -53,11 +60,8 @@ namespace LOOM
                 shuttlePassesToAdd.push_back(pass);
         }
 
-        Fabric& GetFabric() { return fabric; }
-        Tow Services() { return serviceProvider; }
-        LoomSettings& Settings() { return settings; }
-
         bool IsRunning() const { return isRunning; }
+
     private:
         void SetupInternalShuttles();
 
