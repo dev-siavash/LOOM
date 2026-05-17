@@ -156,35 +156,35 @@ void LOOM::Loom::SetupInternalShuttles()
     shuttlePasses.push_back({
         "LOOMInputShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::InputShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
+            Shuttles::InputShuttle(fabric.frame, GetService<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
         },
         ShuttleShed::PreUpdate, 0 });
     // Audio
     shuttlePasses.push_back({
         "LOOMAudioShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::AudioShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::MusicPlayer>(), audioCache);
+            Shuttles::AudioShuttle(fabric.frame, GetService<Fibers::MusicPlayer>(), audioCache);
         },
         ShuttleShed::PreUpdate, 1 });
     // UI
     shuttlePasses.push_back({
         "LOOMUIUpdateShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::UIUpdateShuttle(fabric.frame, serviceProvider.FetchFiber<Fibers::InputState>(), Math::Vector(screenWidth, screenHeight));
+            Shuttles::UIUpdateShuttle(fabric.frame, GetService<Fibers::InputState>(), Math::Vector((float)screenWidth, (float)screenHeight));
         },
         ShuttleShed::PostUpdate, 0 });
     // Physics
     shuttlePasses.push_back({
         "LOOMPhyicsShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::PhysicsShuttle(fabric.frame, fabric, serviceProvider.FetchFiber<Fibers::CollisionEvent>(), settings, dt);
+            Shuttles::PhysicsShuttle(fabric.frame, fabric, GetService<Fibers::CollisionEvent>(), settings, dt);
         },
         ShuttleShed::PostUpdate, 1 });
     // Render
     shuttlePasses.push_back({
         "LOOMRenderShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector(screenWidth, screenHeight));
+            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector((float)screenWidth, (float)screenHeight));
         },
         ShuttleShed::Render, 0 });
 }

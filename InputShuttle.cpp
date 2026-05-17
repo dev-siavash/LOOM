@@ -14,7 +14,7 @@ namespace LOOM::Shuttles
 
         int mx, my;
         SDL_GetMouseState(&mx, &my);
-        inputState.mousePosition = Math::Vector(mx, my);
+        inputState.mousePosition = Math::Vector((float)mx, (float)my);
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
