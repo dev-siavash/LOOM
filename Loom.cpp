@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 #include "MusicPlayer.h"
 #include "InputState.h"
@@ -32,6 +33,15 @@ bool LOOM::Loom::Initialize(const std::string& title, bool fullScreen, int scree
         IMG_Quit();
         std::string msg = "SDL_mixer failed to initialize. SDL_Error: ";
         msg += Mix_GetError();
+        throw std::runtime_error(msg);
+    }
+
+    if (TTF_Init() < 0) {
+        SDL_Quit();
+        IMG_Quit();
+        Mix_CloseAudio();
+        std::string msg = "SDL_ttf failed to initialize. SDL_Error: ";
+        msg += TTF_GetError();
         throw std::runtime_error(msg);
     }
 
@@ -70,10 +80,10 @@ void LOOM::Loom::Terminate()
     audioCache.ClearMusicCache();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     Mix_CloseAudio();
     IMG_Quit();
     SDL_Quit();
-
 }
 
 void LOOM::Loom::Start()
@@ -114,7 +124,7 @@ void LOOM::Loom::Start()
         {
             for (auto& name : shuttlePassNamesToRemove)
             {
-                shuttlePasses.erase(std::remove_if(shuttlePasses.begin(), shuttlePasses.end(), 
+                shuttlePasses.erase(std::remove_if(shuttlePasses.begin(), shuttlePasses.end(),
                     [&name](ShuttlePass pass) { return pass.name == name; }), shuttlePasses.end());
             }
 
