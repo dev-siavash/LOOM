@@ -10,6 +10,7 @@
 #include "TextureCache.h"
 #include "AudioCache.h"
 #include "FontCache.h"
+#include "TextCache.h"
 #include "Fabric.h"
 #include "Tow.h"
 #include "ShuttleShed.h"
@@ -77,6 +78,7 @@ namespace LOOM
         InternalUtilities::TextureCache textureCache;
         InternalUtilities::AudioCache audioCache;
         InternalUtilities::FontCache fontCache;
+        InternalUtilities::TextCache textCache;
 
         std::vector<ShuttlePass> shuttlePasses;
         std::vector<ShuttlePass> shuttlePassesToAdd;

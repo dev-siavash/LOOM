@@ -3,6 +3,7 @@
 
 #include "Transform.h"
 #include "Pattern.h"
+#include "Text.h"
 #include "BoxCollider.h"
 #include "InternalShuttles.h"
 #include "InternalFunctions.h"
@@ -11,15 +12,19 @@ using namespace LOOM::InternalUtilities;
 
 namespace LOOM::Shuttles
 {
-    void RenderShuttle(entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache, LoomSettings settings, Math::Vector screenDimensions)
+    void RenderShuttle
+        (entt::registry& frame, SDL_Renderer* renderer, TextureCache& textureCache, 
+            TextCache& textCache, LoomSettings settings, Math::Vector screenDimensions)
     {
         SDL_RenderClear(renderer);
 
-        auto view = frame.view<Fibers::Transform, Fibers::Pattern>();
+        // PATTERN RENDER
 
         // Create render list
         std::vector<std::pair<int, entt::entity>> renderList;
-        view.each([&](entt::entity entity, Fibers::Transform& t, Fibers::Pattern& p) {
+
+        auto pView = frame.view<Fibers::Transform, Fibers::Pattern>();
+        pView.each([&](entt::entity entity, Fibers::Transform& t, Fibers::Pattern& p) {
             if (!p.visible || !textureCache.Get(renderer, p.path)) return;
             renderList.push_back({ p.sortingOrder, entity });
         });
@@ -31,8 +36,8 @@ namespace LOOM::Shuttles
         // Render each
         for (auto& [order, entity] : renderList)
         {
-            auto& transform = view.get<Fibers::Transform>(entity);
-            auto& pattern = view.get<Fibers::Pattern>(entity);
+            auto& transform = pView.get<Fibers::Transform>(entity);
+            auto& pattern = pView.get<Fibers::Pattern>(entity);
             auto texture = textureCache.Get(renderer, pattern.path);
 
             int texWidth, texHeight;
@@ -54,6 +59,41 @@ namespace LOOM::Shuttles
             SDL_RenderCopyEx(renderer, texture, &src, &dest, transform.rotation, nullptr, pattern.flip);
         }
 
+        // TEXT RENDER
+
+        auto tView = frame.view<Fibers::Transform, Fibers::Text>();
+        tView.each([&](entt::entity entity, Fibers::Transform& transform, Fibers::Text& text)
+        {
+            SDL_Texture* texture;
+            if (!(texture = textCache.Get(text.cacheKey)))
+                return;
+
+            int w, h;
+            SDL_QueryTexture(texture, nullptr, nullptr, &w, &h);
+            auto dw = (int)(w * transform.scale.x);
+            auto dh = (int)(h * transform.scale.y);
+
+            float px, py = 0.5f;
+            switch (text.alignment) {
+                case Fibers::Text::Alignment::Left:   px = 0.0f; break;
+                case Fibers::Text::Alignment::Center: px = 0.5f; break;
+                case Fibers::Text::Alignment::Right:  px = 1.0f; break;
+            }
+
+            auto screenPosition = InternalUtilities::WorldToScreenPosition(transform.position, screenDimensions);
+            SDL_Rect dest = {
+                (int)(screenPosition.x - px * dw),
+                (int)(screenPosition.y - py * dh),
+                dw, dh
+            };
+
+            SDL_Point rotationCenter = { (int)(px * dw), (int)(py * dh) };
+
+            SDL_RenderCopyEx(renderer, texture, nullptr, &dest, transform.rotation, &rotationCenter, SDL_FLIP_NONE);
+        });
+
+        // DEBUG
+
         if (settings.drawColliderOutlines)
         {
             auto view = frame.view<Fibers::Transform, Fibers::BoxCollider>();
@@ -65,8 +105,10 @@ namespace LOOM::Shuttles
                 SDL_Rect rect = { (int)left, (int)top, (int)collider.size.x, (int)collider.size.y };
                 SDL_RenderDrawRect(renderer, &rect);
             });
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         }
+
+        // PRESENT
 
         SDL_RenderPresent(renderer);
     }

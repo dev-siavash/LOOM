@@ -14,6 +14,7 @@
 #include "PhysicsBody.h"
 #include "CollisionEvent.h"
 #include "Pattern.h"
+#include "Text.h"
 
 #include "Prefab.h"
 #include "PrefabBuilder.h"

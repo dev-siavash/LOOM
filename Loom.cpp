@@ -75,9 +75,15 @@ void LOOM::Loom::Terminate()
 {
     isRunning = false;
     fabric.Clear();
+
+    // Clearing caches
     textureCache.Clear();
     audioCache.ClearChunkCache();
     audioCache.ClearMusicCache();
+    fontCache.Clear();
+    textCache.Clear();
+
+    // Closing SDL subsystems
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();
@@ -168,33 +174,40 @@ void LOOM::Loom::SetupInternalShuttles()
         [this](Loom& loom, float dt) {
             Shuttles::InputShuttle(fabric.frame, GetService<Fibers::InputState>(), [this]() { this->delayedTermination = true; });
         },
-        ShuttleShed::PreUpdate, 0 });
+        ShuttleShed::PreUpdate, -1 });
     // Audio
     shuttlePasses.push_back({
         "LOOMAudioShuttle",
         [this](Loom& loom, float dt) {
             Shuttles::AudioShuttle(fabric.frame, GetService<Fibers::MusicPlayer>(), audioCache);
         },
-        ShuttleShed::PreUpdate, 1 });
+        ShuttleShed::PreUpdate, 0 });
     // UI
     shuttlePasses.push_back({
         "LOOMUIUpdateShuttle",
         [this](Loom& loom, float dt) {
             Shuttles::UIUpdateShuttle(fabric.frame, GetService<Fibers::InputState>(), Math::Vector((float)screenWidth, (float)screenHeight));
         },
-        ShuttleShed::PostUpdate, 0 });
+        ShuttleShed::PostUpdate, -1 });
     // Physics
     shuttlePasses.push_back({
         "LOOMPhyicsShuttle",
         [this](Loom& loom, float dt) {
             Shuttles::PhysicsShuttle(fabric.frame, fabric, GetService<Fibers::CollisionEvent>(), settings, dt);
         },
-        ShuttleShed::PostUpdate, 1 });
+        ShuttleShed::PostUpdate, 0 });
+    // Text Render
+    shuttlePasses.push_back({
+        "LOOMTextRenderShuttle",
+        [this](Loom& loom, float dt) {
+            Shuttles::TextCacheUpdateShuttle(fabric.frame, renderer, fontCache, textCache, Math::Vector((float)screenWidth, (float)screenHeight));
+        },
+        ShuttleShed::Render, -1 });
     // Render
     shuttlePasses.push_back({
         "LOOMRenderShuttle",
         [this](Loom& loom, float dt) {
-            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, settings, Math::Vector((float)screenWidth, (float)screenHeight));
+            Shuttles::RenderShuttle(fabric.frame, renderer, textureCache, textCache, settings, Math::Vector((float)screenWidth, (float)screenHeight));
         },
         ShuttleShed::Render, 0 });
 }

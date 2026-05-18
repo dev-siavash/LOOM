@@ -11,11 +11,14 @@
 #include "Loom.h"
 #include "TextureCache.h"
 #include "AudioCache.h"
+#include "FontCache.h"
+#include "TextCache.h"
 
 namespace LOOM::Shuttles
 {
     void RenderShuttle
-        (entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache, LoomSettings settings, Math::Vector screenDimensions);
+        (entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::TextureCache& textureCache, 
+            InternalUtilities::TextCache& textCache, LoomSettings settings, Math::Vector screenDimensions);
     void InputShuttle
         (entt::registry& frame, Fibers::InputState& inputState, std::function<void(void)>);
     void AudioShuttle
@@ -24,6 +27,9 @@ namespace LOOM::Shuttles
         (entt::registry& frame, Fabric& fabric, Fibers::CollisionEvent& collisionEvent, LoomSettings settings, float deltaTime);
     void UIUpdateShuttle
         (entt::registry& frame, Fibers::InputState& inputState, Math::Vector screenDimensions);
+    void TextCacheUpdateShuttle
+        (entt::registry& frame, SDL_Renderer* renderer, InternalUtilities::FontCache& fontCache,
+            InternalUtilities::TextCache& textCache, Math::Vector screenDimensions);
 }
 
 #endif
