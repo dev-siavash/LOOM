@@ -75,9 +75,9 @@ namespace LOOM::Shuttles
 
             float px, py = 0.5f;
             switch (text.alignment) {
-                case Fibers::Text::Alignment::Left:   px = 0.0f; break;
+                case Fibers::Text::Alignment::Left:   px = 1.0f; break;
                 case Fibers::Text::Alignment::Center: px = 0.5f; break;
-                case Fibers::Text::Alignment::Right:  px = 1.0f; break;
+                case Fibers::Text::Alignment::Right:  px = 0.0f; break;
             }
 
             auto screenPosition = InternalUtilities::WorldToScreenPosition(transform.position, screenDimensions);
