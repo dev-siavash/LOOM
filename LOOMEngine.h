@@ -2,6 +2,7 @@
 #define LOOMENGINE_H
 
 #include "Vector.h"
+#include "Color.h"
 
 #include "FiberTraits.h"
 #include "MusicPlayer.h"
