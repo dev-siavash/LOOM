@@ -47,7 +47,7 @@ namespace LOOM
         template<typename ...Fibers>
         std::optional<Tow> FetchTowOf() {
             auto rawView = frame.view<Fibers...>();
-            if (rawView.empty())
+            if (rawView.front() == entt::null)
                 return std::nullopt;
             return Tow(this, rawView.front());
         }
