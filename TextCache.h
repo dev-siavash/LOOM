@@ -11,6 +11,7 @@ namespace LOOM::InternalUtilities
     public:
         SDL_Texture* Get(std::size_t);
         void Store(std::size_t, SDL_Texture*);
+        bool Has(std::size_t);
         void Remove(std::size_t);
         void Clear();
     private:

@@ -14,6 +14,11 @@ void LOOM::InternalUtilities::TextCache::Store(std::size_t cacheKey, SDL_Texture
     cache[cacheKey] = texture;
 }
 
+bool LOOM::InternalUtilities::TextCache::Has(std::size_t cacheKey)
+{
+    return cache.contains(cacheKey);
+}
+
 void LOOM::InternalUtilities::TextCache::Remove(std::size_t cacheKey)
 {
     if (!cache.contains(cacheKey))

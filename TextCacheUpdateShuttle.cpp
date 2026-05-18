@@ -11,6 +11,9 @@ void LOOM::Shuttles::TextCacheUpdateShuttle
     auto view = frame.view<Fibers::Transform, Fibers::Text>();
     view.each([&](entt::entity entity, Fibers::Transform& transform, Fibers::Text& text) 
     {
+        if (text.isStatic && textCache.Has(text.cacheKey))
+            return;
+
         std::size_t key;
         Hash(key, text.text, text.fontPath, text.fontSize, text.color.r, text.color.g, text.color.b, text.color.a);
 
