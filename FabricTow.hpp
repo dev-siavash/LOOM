@@ -11,12 +11,13 @@ T& LOOM::Tow::PlyFiber(Args... args) {
 
 template<typename T>
 void LOOM::Tow::PlyTag() {
+    assert(!fabric->frame.all_of<T>(id) && "This fiber type already plied to this tow.");
     fabric->frame.emplace<T>(id);
 }
 
 template<typename T>
 T& LOOM::Tow::FetchFiber() {
-    assert(HoldsFiber<T>());
+    assert(HoldsFiber<T>() && "Tow doens't hold the requested fiber.");
     return fabric->frame.get<T>(id);
 }
 
