@@ -1,3 +1,7 @@
+/**
+ * @file Pattern.h
+ * @brief Sprite fiber.
+ */
 #ifndef PATTERN_H
 #define PATTERN_H
 
@@ -11,15 +15,36 @@
 
 namespace LOOM::Fibers
 {
+    /**
+     * @brief Sprite drawn at the tow's Transform. Requires Transform.
+     *
+     * Drawn size is the source rectangle times Transform::scale. Missing textures are skipped.
+     */
     struct Pattern
     {
+        /** @brief Image file path (loaded once and cached). */
         std::string path;
+        /** @brief Draw order; lower values are drawn first. */
         int sortingOrder;
+        /** @brief SDL flip flags, set from the constructor's flipX/flipY. */
         SDL_RendererFlip flip;
+        /** @brief Anchor in sprite space (0..1, origin top-left); see Math::Vector::pivotCenter() and friends. */
         Math::Vector pivot;
+        /** @brief Hides the sprite when false. */
         bool visible;
+        /** @brief Region of the image to draw; zero width and height selects the whole image. */
         SDL_Rect srcRect;
 
+        /**
+         * @brief Constructs a sprite.
+         * @param path Image path.
+         * @param sortingOrder Draw order.
+         * @param flipX Mirror horizontally.
+         * @param flipY Mirror vertically.
+         * @param pivot Anchor point.
+         * @param visible Initial visibility.
+         * @param srcRect Source region.
+         */
         Pattern(
             std::string path = "",
             int sortingOrder = 0,
@@ -42,12 +67,16 @@ namespace LOOM::Fibers
         }
     };
 
+    /** @brief Serialization traits for Pattern. */
     template<>
     struct FiberTraits<Pattern>
     {
+        /** @brief True if the type can be stored in prefabs. */
         static constexpr bool Serializable = true;
+        /** @brief True if the type is a payload-free marker. */
         static constexpr bool IsTag = false;
 
+        /** @brief Writes the fiber to a BinaryWriter. */
         static void Save(InternalUtilities::BinaryWriter& writer, const Pattern& p)
         {
             writer.Write(p.path);
@@ -62,6 +91,7 @@ namespace LOOM::Fibers
             writer.Write(p.srcRect.h);
         }
 
+        /** @brief Reads the fiber from a BinaryReader. */
         static Pattern Load(InternalUtilities::BinaryReader& reader)
         {
             Pattern p;

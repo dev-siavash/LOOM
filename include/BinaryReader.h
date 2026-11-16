@@ -1,3 +1,7 @@
+/**
+ * @file BinaryReader.h
+ * @brief Binary deserialization.
+ */
 #ifndef BINARY_READER_H
 #define BINARY_READER_H
 
@@ -11,11 +15,25 @@
 
 namespace LOOM::InternalUtilities
 {
+    /**
+     * @brief (Internal) Reads arithmetic types, enums, std::string, std::vector and FiberTraits types from a byte buffer.
+     *
+     * The buffer must outlive the reader.
+     */
     class BinaryReader
     {
     public:
+        /**
+         * @brief Creates a reader over @p data.
+         * @param data Source bytes.
+         */
         explicit BinaryReader(const std::vector<std::byte>& data) : data{ data } {}
 
+        /**
+         * @brief Reads @p value from the buffer.
+         * @throws std::runtime_error On buffer underflow.
+         * @param value Receives the data.
+         */
         template<typename T>
         void Read(T& value)
         {

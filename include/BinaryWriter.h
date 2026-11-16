@@ -1,3 +1,7 @@
+/**
+ * @file BinaryWriter.h
+ * @brief Binary serialization.
+ */
 #ifndef BINARY_WRITER_H
 #define BINARY_WRITER_H
 
@@ -9,9 +13,14 @@
 
 namespace LOOM::InternalUtilities
 {
+    /** @brief (Internal) Writes arithmetic types, enums, std::string, std::vector and FiberTraits types to a byte buffer. */
     class BinaryWriter
     {
     public: 
+        /**
+         * @brief Appends @p value to the buffer.
+         * @param value Data to write.
+         */
         template<typename T>
         void Write(const T& value)
         {
@@ -43,6 +52,7 @@ namespace LOOM::InternalUtilities
             }
         }
 
+        /** @brief Moves the written bytes out of the writer. */
         std::vector<std::byte> Take()
         {
             return std::move(buffer);

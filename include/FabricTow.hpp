@@ -1,3 +1,7 @@
+/**
+ * @file FabricTow.hpp
+ * @brief Template definitions of Tow and Fabric members.
+ */
 #ifndef FABRIC_TOW_HPP
 #define FABRIC_TOW_HPP
 
