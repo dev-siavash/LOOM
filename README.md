@@ -1,6 +1,8 @@
 # LOOM
 
-A small 2D game engine in C++20, built on [SDL2](https://www.libsdl.org/) and [EnTT](https://github.com/skypjack/entt).
+An in-development 2D game engine in C++20, built on [SDL2](https://www.libsdl.org/) and [EnTT](https://github.com/skypjack/entt).
+
+![Uploading Dreamy Gradient LOOM Logo Poster.png…]()
 
 LOOM is an entity-component-system with a weaving vocabulary: **shuttles** (systems) run over a **fabric** (world) of **tows** (entities) that hold **fibers** (components). It ships with sprites, text, audio, input, UI hover/click detection and simple AABB physics.
 
